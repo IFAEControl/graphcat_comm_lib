@@ -5,7 +5,9 @@
 
 constexpr uint8_t HEADER_BYTE_SIZE = 32;
 
-enum class HEADER_PACKTYPE : uint8_t {
+// FIXME: windows compilation error
+//enum class HEADER_PACKTYPE : uint8_t {
+enum HEADER_PACKTYPE {
     COMMAND = 1,
     ASYNC_START_CDA,
     ASYNC_STOP_CDA,
