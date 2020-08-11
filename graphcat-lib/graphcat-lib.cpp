@@ -1,6 +1,10 @@
 #include <iostream>
 
+#ifdef _WIN32
+#include <winsock.h>
+#else
 #include <arpa/inet.h>
+#endif
 
 #include <Poco/Net/SocketAddress.h>
 #include <Poco/Net/StreamSocket.h>
