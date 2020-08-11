@@ -2,7 +2,7 @@
 
 #ifdef _WIN32
 #pragma once
-#include <winsock.h>
+#include <winsock2.h>
 #else
 #include <arpa/inet.h>
 #endif
