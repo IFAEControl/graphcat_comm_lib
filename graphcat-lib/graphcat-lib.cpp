@@ -1,6 +1,7 @@
 #include <iostream>
 
 #ifdef _WIN32
+#pragma once
 #include <winsock.h>
 #else
 #include <arpa/inet.h>
