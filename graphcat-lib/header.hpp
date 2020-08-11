@@ -3,11 +3,14 @@
 #include <ostream>
 #include <cstdint>
 
+// Fix compilation error
+#ifdef _WIN32
+#undef ERROR
+#endif
+
 constexpr uint8_t HEADER_BYTE_SIZE = 32;
 
-// FIXME: windows compilation error
-//enum class HEADER_PACKTYPE : uint8_t {
-enum HEADER_PACKTYPE {
+enum class HEADER_PACKTYPE : uint8_t {
     COMMAND = 1,
     ASYNC_START_CDA,
     ASYNC_STOP_CDA,
