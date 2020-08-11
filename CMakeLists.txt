@@ -34,7 +34,7 @@ set(CMAKE_CONFIGURATION_TYPES
 ################################################################################
 if(MSVC)
     # remove default flags provided with CMake for MSVC
-    set(CMAKE_CXX_FLAGS "")
+    set(CMAKE_CXX_FLAGS "/ZW")
     set(CMAKE_CXX_FLAGS_DEBUG "")
     set(CMAKE_CXX_FLAGS_RELEASE "")
 endif()
