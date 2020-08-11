@@ -3,9 +3,8 @@ set(PROJECT_NAME graphcat-lib)
 ################################################################################
 # Source groups
 ################################################################################
-set(Archivos_de_origen
-    "graphcat-lib.cpp"
-)
+file(GLOB Archivos_de_origen *.cpp)
+
 source_group("Archivos de origen" FILES ${Archivos_de_origen})
 
 set(ALL_FILES

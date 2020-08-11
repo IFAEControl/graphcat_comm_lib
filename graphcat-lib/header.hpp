@@ -35,9 +35,4 @@ struct BaseHeaderType {
     uint8_t reserved[2];
     uint32_t packetsize;
     uint8_t fill[24];
-    
-    friend std::ostream &operator<<(std::ostream &output, const BaseHeaderType &h) { 
-         output << static_cast<uint8_t>(h.packtype) << h.data_rate << h.reserved << h.packetsize << h.fill;
-         return output;            
-      }
 };
