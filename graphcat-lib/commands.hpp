@@ -16,6 +16,10 @@ struct Message {
 class CommandCreator {
 public:
     Message ping_pong();
+    Message reset();
+    Message pixel_pulse_write();
+    Message generate_pulse();
+    Message read_temperature();
 private:
 
 };

@@ -1,6 +1,6 @@
 #include "graphcat-lib.hpp"
 
 int main() {
-    set_ip("127.0.0.1");
+    initCommunication("127.0.0.1", 32000, 32001);
     gc_ping_pong();
 }
