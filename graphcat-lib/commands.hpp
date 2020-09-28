@@ -20,6 +20,8 @@ public:
     Message pixel_pulse_write();
     Message generate_pulse();
     Message read_temperature();
+    Message read_reg();
+    Message write_reg();
 private:
 
 };

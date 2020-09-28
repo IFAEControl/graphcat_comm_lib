@@ -4,6 +4,15 @@
 #include "commands.hpp"
 #include "sockets.hpp"
 
+int readReg() {
+    CommandCreator c;
+    auto cmd = c.read_reg();
+    auto resp = send_command(cmd);
+    std::cout << resp.body << std::endl;
+    return 0;
+}
+
+
 int GraphCATReset() {
     CommandCreator c;
     auto cmd = c.reset();
@@ -37,7 +46,7 @@ int ReadTemperature(unsigned* temp) {
     auto cmd = c.read_temperature();
     auto resp = send_command(cmd);
     std::cout << resp.body << std::endl;
-    *temp = resp.body["answer"]["temperautre"];
+    *temp = resp.body["answer"]["temperature"];
     return 0;
 }
 

@@ -21,9 +21,26 @@ Message CommandCreator::ping_pong() {
     return c;
 }
 
+Message CommandCreator::read_reg() {
+    Message c;
+    c.body["command"] = "gc.read_reg";
+    c.body["answer"] = json{};
+    json args;
+    args["reg"] = 0x1;
+    c.body["arguments"] = args;
+    auto buf = c.body.dump();
+    
+    c.header.packtype = HEADER_PACKTYPE::COMMAND;
+    c.header.packetsize = htonl(buf.size());
+    return c;
+}
+
+Message CommandCreator::write_reg() {
+}
+
 Message CommandCreator::reset() {
     Message c;
-    c.body["command"] = "gc.reset";
+    c.body["command"] = "gc.reset_gc_chip";
     c.body["answer"] = json{};
     json args{};
     c.body["arguments"] = args;
@@ -51,8 +68,7 @@ Message CommandCreator::read_temperature() {
     Message c;
     c.body["command"] = "gc.read_temperature";
     c.body["answer"] = json{};
-    json args{};
-    c.body["arguments"] = args;
+    c.body["arguments"] = json{};
     auto buf = c.body.dump();
     
     c.header.packtype = HEADER_PACKTYPE::COMMAND;
@@ -62,10 +78,9 @@ Message CommandCreator::read_temperature() {
 
 Message CommandCreator::generate_pulse() {
     Message c;
-    c.body["command"] = "gc.generate_pulse";
+    c.body["command"] = "gc.generate_pulses";
     c.body["answer"] = json{};
-    json args{};
-    c.body["arguments"] = args;
+    c.body["arguments"] = json{};
     auto buf = c.body.dump();
     
     c.header.packtype = HEADER_PACKTYPE::COMMAND;
