@@ -14,7 +14,7 @@ set(ALL_FILES
 ################################################################################
 # Target
 ################################################################################
-add_library(${PROJECT_NAME} STATIC ${ALL_FILES})
+add_library(${PROJECT_NAME} SHARED ${ALL_FILES})
 target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
 
 add_executable(test_client "test_client.cpp")
