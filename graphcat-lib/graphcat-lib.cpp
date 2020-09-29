@@ -1,4 +1,5 @@
 #include <iostream>
+#include <array>
 
 #include "graphcat-lib.hpp"
 #include "commands.hpp"
@@ -20,6 +21,17 @@ int GraphCATReset() {
     std::cout << resp.body << std::endl;
     return 0;
 }
+
+int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]) {
+    CommandCreator c;
+    std::array<unsigned, 3> chip_config;
+    for(int i = 0; i < 3; i++) chip_config[i] = in[i];
+    auto cmd = c.write_chip_config(chip_config);
+    auto resp = send_command(cmd);
+    std::cout << resp.body << std::endl;
+    return 0;
+}
+
 
 int PixelPulseRegisterWrite(unsigned *pxPulseRegDatain[35], unsigned *pxPulseRegDataout[35]) {
     CommandCreator c;

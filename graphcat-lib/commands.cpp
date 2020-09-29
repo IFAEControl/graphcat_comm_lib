@@ -1,11 +1,11 @@
-#include "commands.hpp"
-
 #ifdef _WIN32
 #pragma once
 #include <winsock2.h>
 #else
 #include <arpa/inet.h>
 #endif
+
+#include "commands.hpp"
 
 Message CommandCreator::ping_pong() {
     Message c;
@@ -50,6 +50,21 @@ Message CommandCreator::reset() {
     c.header.packetsize = htonl(buf.size());
     return c;
 }
+
+Message CommandCreator::write_chip_config(std::array<unsigned, 3> chip_config) {
+    Message c;
+    c.body["command"] = "gc.write_chip_config";
+    c.body["answer"] = json{};
+    json args;
+    args["chip_config"] = chip_config;
+    c.body["arguments"] = args;
+    auto buf = c.body.dump();
+    
+    c.header.packtype = HEADER_PACKTYPE::COMMAND;
+    c.header.packetsize = htonl(buf.size());
+    return c;
+}
+
 
 Message CommandCreator::pixel_pulse_write() {
     Message c;
