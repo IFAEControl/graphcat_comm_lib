@@ -15,6 +15,11 @@ set(ALL_FILES
 # Target
 ################################################################################
 add_library(${PROJECT_NAME} SHARED ${ALL_FILES})
+
+# Fix for windows
+include(GenerateExportHeader)
+generate_export_header(${PROJECT_NAME})
+
 target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
 
 
