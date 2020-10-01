@@ -14,13 +14,14 @@ set(ALL_FILES
 ################################################################################
 # Target
 ################################################################################
+add_library(${PROJECT_NAME}-temp STATIC ${ALL_FILES})
 add_library(${PROJECT_NAME} SHARED ${ALL_FILES})
 
 # Fix for windows
 include(GenerateExportHeader)
 generate_export_header(${PROJECT_NAME})
 
-target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}-temp ${CONAN_LIBS})
 
 
 if(NOT MSVC)
