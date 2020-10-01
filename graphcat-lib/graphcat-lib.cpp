@@ -5,12 +5,16 @@
 #include "commands.hpp"
 #include "sockets.hpp"
 
-int readReg() {
+int readReg() try {
     CommandCreator c;
     auto cmd = c.read_reg();
     auto resp = send_command(cmd);
     std::cout << resp.body << std::endl;
     return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+} catch(...) {
+    std::cout << "F" << std::endl;
 }
 
 

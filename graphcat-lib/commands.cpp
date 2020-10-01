@@ -36,6 +36,7 @@ Message CommandCreator::read_reg() {
 }
 
 Message CommandCreator::write_reg() {
+	Message c; return c;
 }
 
 Message CommandCreator::reset() {
