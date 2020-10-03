@@ -13,8 +13,10 @@ int readReg() try {
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
+    return -1;
 } catch(...) {
     std::cout << "F" << std::endl;
+    return -2;
 }
 
 
@@ -36,10 +38,21 @@ int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]) {
     return 0;
 }
 
-
-int PixelPulseRegisterWrite(unsigned *pxPulseRegDatain[35], unsigned *pxPulseRegDataout[35]) {
+int PixelConfigRegisterWrite(const unsigned in[560], unsigned out[560]) {
     CommandCreator c;
-    auto cmd = c.pixel_pulse_write();
+    std::array<unsigned, 560> pixel_config;
+    for(int i = 0; i < 560; i++) pixel_config[i] = in[i];
+    auto cmd = c.write_pixel_config(pixel_config);
+    auto resp = send_command(cmd);
+    std::cout << resp.body << std::endl;
+    return 0;
+}
+
+int PixelPulseRegisterWrite(const unsigned in[35], unsigned out[35]) {
+    CommandCreator c;
+    std::array<unsigned, 35> pixel_pulse;
+    for(int i = 0; i < 35; i++) pixel_pulse[i] = in[i];
+    auto cmd = c.pixel_pulse_write(pixel_pulse);
     auto resp = send_command(cmd);
     std::cout << resp.body << std::endl;
     return 0;

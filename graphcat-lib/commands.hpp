@@ -19,7 +19,8 @@ public:
     Message ping_pong();
     Message reset();
     Message write_chip_config(std::array<unsigned, 3> chip_config);
-    Message pixel_pulse_write();
+    Message write_pixel_config(std::array<unsigned, 560> pixel_config);
+    Message pixel_pulse_write(std::array<unsigned, 35> pixel_pulse);
     Message generate_pulse();
     Message read_temperature();
     Message read_reg();
