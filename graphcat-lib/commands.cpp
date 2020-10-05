@@ -71,7 +71,7 @@ Message CommandCreator::write_pixel_config(std::array<unsigned int, 560> pixel_c
     c.body["command"] = "gc.write_pixel_config";
     c.body["answer"] = json{};
     json args;
-    args["chip_config"] = pixel_config;
+    args["pixel_config"] = pixel_config;
     c.body["arguments"] = args;
     auto buf = c.body.dump();
 
