@@ -1,5 +1,6 @@
 #include <iostream>
 #include <array>
+#include <algorithm>
 
 #include "graphcat-lib.hpp"
 #include "commands.hpp"
@@ -34,6 +35,8 @@ int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]) {
     for(int i = 0; i < 3; i++) chip_config[i] = in[i];
     auto cmd = c.write_chip_config(chip_config);
     auto resp = send_command(cmd);
+    auto out_arr = resp.body["answer"]["chip_config"];
+    std::copy(out_arr.begin(), out_arr.end(), out);
     std::cout << resp.body << std::endl;
     return 0;
 }
@@ -44,6 +47,8 @@ int PixelConfigRegisterWrite(const unsigned in[560], unsigned out[560]) {
     for(int i = 0; i < 560; i++) pixel_config[i] = in[i];
     auto cmd = c.write_pixel_config(pixel_config);
     auto resp = send_command(cmd);
+    auto out_arr = resp.body["answer"]["pixel_config"];
+    std::copy(out_arr.begin(), out_arr.end(), out);
     std::cout << resp.body << std::endl;
     return 0;
 }
@@ -54,6 +59,8 @@ int PixelPulseRegisterWrite(const unsigned in[35], unsigned out[35]) {
     for(int i = 0; i < 35; i++) pixel_pulse[i] = in[i];
     auto cmd = c.pixel_pulse_write(pixel_pulse);
     auto resp = send_command(cmd);
+    auto out_arr = resp.body["answer"]["pixel_pulse"];
+    std::copy(out_arr.begin(), out_arr.end(), out);
     std::cout << resp.body << std::endl;
     return 0;
 }
