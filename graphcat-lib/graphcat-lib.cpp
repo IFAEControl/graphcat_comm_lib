@@ -21,15 +21,21 @@ int readReg() try {
 }
 
 
-int GraphCATReset() {
+int GraphCATReset() try {
     CommandCreator c;
     auto cmd = c.reset();
     auto resp = send_command(cmd);
     std::cout << resp.body << std::endl;
     return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
 }
 
-int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]) {
+int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]) try {
     CommandCreator c;
     std::array<unsigned, 3> chip_config;
     for(int i = 0; i < 3; i++) chip_config[i] = in[i];
@@ -39,9 +45,15 @@ int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]) {
     std::copy(out_arr.begin(), out_arr.end(), out);
     std::cout << resp.body << std::endl;
     return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
 }
 
-int PixelConfigRegisterWrite(const unsigned in[560], unsigned out[560]) {
+int PixelConfigRegisterWrite(const unsigned in[560], unsigned out[560]) try {
     CommandCreator c;
     std::array<unsigned, 560> pixel_config;
     for(int i = 0; i < 560; i++) pixel_config[i] = in[i];
@@ -51,9 +63,15 @@ int PixelConfigRegisterWrite(const unsigned in[560], unsigned out[560]) {
     std::copy(out_arr.begin(), out_arr.end(), out);
     std::cout << resp.body << std::endl;
     return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
 }
 
-int PixelPulseRegisterWrite(const unsigned in[35], unsigned out[35]) {
+int PixelPulseRegisterWrite(const unsigned in[35], unsigned out[35]) try {
     CommandCreator c;
     std::array<unsigned, 35> pixel_pulse;
     for(int i = 0; i < 35; i++) pixel_pulse[i] = in[i];
@@ -63,18 +81,30 @@ int PixelPulseRegisterWrite(const unsigned in[35], unsigned out[35]) {
     std::copy(out_arr.begin(), out_arr.end(), out);
     std::cout << resp.body << std::endl;
     return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
 }
 
 
-int GeneratePulses() {
+int GeneratePulses() try {
     CommandCreator c;
     auto cmd = c.generate_pulse();
     auto resp = send_command(cmd);
     std::cout << resp.body << std::endl;
     return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
 }
 
-int ReadTemperature(unsigned* temp) {
+int ReadTemperature(unsigned* temp) try {
     if(!temp)
         return -1;
     
@@ -84,6 +114,12 @@ int ReadTemperature(unsigned* temp) {
     std::cout << resp.body << std::endl;
     *temp = resp.body["answer"]["temperature"];
     return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
 }
 
 void initCommunication(const char* str, unsigned sync_port, unsigned async_port) {

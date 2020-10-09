@@ -14,7 +14,7 @@ using Poco::Net::IPAddress;
 static std::string ip = "8.8.8.8";
 constexpr unsigned port = 32000;
 
-void set_dest_ip(const std::string& str) {
+void set_dest_ip(const std::string& str) noexcept {
     ip = str;
 }
 
