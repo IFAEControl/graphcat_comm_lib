@@ -126,6 +126,81 @@ void initCommunication(const char* str, unsigned sync_port, unsigned async_port)
     set_dest_ip(str);
 }
 
+int LnaHpfReset(unsigned wait_time_us) try {
+    CommandCreator c;
+    auto cmd = c.reset_lna_hpf(wait_time_us);
+    auto resp = send_command(cmd);
+    std::cout << resp.body << std::endl;
+    return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
+}
+
+int LnaNeuronDriving(unsigned wait_time_us) try {
+    CommandCreator c;
+    auto cmd = c.lna_neuron_driving(wait_time_us);
+    auto resp = send_command(cmd);
+    std::cout << resp.body << std::endl;
+    return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
+}
+
+int LnaNoNeuronDriving(unsigned wait_time_us) try {
+    CommandCreator c;
+    auto cmd = c.lna_no_neuron_driving(wait_time_us);
+    auto resp = send_command(cmd);
+    std::cout << resp.body << std::endl;
+    return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
+}
+
+int PllOutResetStatus(unsigned* status) try {
+    if(!status)
+        return -1;
+    
+    CommandCreator c;
+    auto cmd = c.get_pll_out_reset_status();
+    auto resp = send_command(cmd);
+    std::cout << resp.body << std::endl;
+    *status = resp.body["answer"]["status"];
+    return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
+}
+
+int PllBitStreamGenerator(unsigned mode) try {
+    CommandCreator c;
+    auto cmd = c.set_pll_bitstream_mode(mode);
+    auto resp = send_command(cmd);
+    std::cout << resp.body << std::endl;
+    return 0;
+} catch(std::exception& e) {
+    std::cout << e.what() << std::endl;
+    return -1;
+} catch(...) {
+    std::cout << "F" << std::endl;
+    return -2;
+}
+
+
 
 int gc_ping_pong() {
     CommandCreator c;

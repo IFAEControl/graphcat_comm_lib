@@ -118,3 +118,71 @@ Message CommandCreator::generate_pulse() {
     c.header.packetsize = htonl(buf.size());
     return c;
 }
+
+Message CommandCreator::reset_lna_hpf(unsigned wait_time_us) {
+        Message c;
+    c.body["command"] = "gc.reset_lna_hpf";
+    c.body["answer"] = json{};
+    json args;
+    args["wait_time_us"] = wait_time_us;
+    c.body["arguments"] = args;
+    auto buf = c.body.dump();
+    
+    c.header.packtype = HEADER_PACKTYPE::COMMAND;
+    c.header.packetsize = htonl(buf.size());
+    return c;
+}
+
+Message CommandCreator::lna_neuron_driving(unsigned wait_time_us) {
+        Message c;
+    c.body["command"] = "gc.lna_neuron_driving";
+    c.body["answer"] = json{};
+    json args;
+    args["wait_time_us"] = wait_time_us;
+    c.body["arguments"] = args;
+    auto buf = c.body.dump();
+    
+    c.header.packtype = HEADER_PACKTYPE::COMMAND;
+    c.header.packetsize = htonl(buf.size());
+    return c;
+}
+
+Message CommandCreator::lna_no_neuron_driving(unsigned wait_time_us) {
+    Message c;
+    c.body["command"] = "gc.lna_no_neuron_driving";
+    c.body["answer"] = json{};
+    json args;
+    args["wait_time_us"] = wait_time_us;
+    c.body["arguments"] = args;
+    auto buf = c.body.dump();
+    
+    c.header.packtype = HEADER_PACKTYPE::COMMAND;
+    c.header.packetsize = htonl(buf.size());
+    return c;
+}
+
+Message CommandCreator::get_pll_out_reset_status() {
+    Message c;
+    c.body["command"] = "gc.get_pll_out_reset_status";
+    c.body["answer"] = json{};
+    c.body["arguments"] = json{};
+    auto buf = c.body.dump();
+    
+    c.header.packtype = HEADER_PACKTYPE::COMMAND;
+    c.header.packetsize = htonl(buf.size());
+    return c;
+}
+
+Message CommandCreator::set_pll_bitstream_mode(unsigned mode) {
+    Message c;
+    c.body["command"] = "gc.set_pll_bitstream_mode";
+    c.body["answer"] = json{};
+    json args;
+    args["mode"] = mode;
+    c.body["arguments"] = args;
+    auto buf = c.body.dump();
+    
+    c.header.packtype = HEADER_PACKTYPE::COMMAND;
+    c.header.packetsize = htonl(buf.size());
+    return c;
+}

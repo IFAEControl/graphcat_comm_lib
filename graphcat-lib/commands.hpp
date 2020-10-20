@@ -25,6 +25,11 @@ public:
     Message read_temperature();
     Message read_reg();
     Message write_reg();
+    Message reset_lna_hpf(unsigned wait_time_us);
+    Message lna_neuron_driving(unsigned wait_time_us);
+    Message lna_no_neuron_driving(unsigned wait_time_us);
+    Message get_pll_out_reset_status();
+    Message set_pll_bitstream_mode(unsigned mode);
 private:
 
 };
