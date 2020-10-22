@@ -1,3 +1,5 @@
+#include <array>
+
 #ifdef _WIN32
 #pragma once
 #include <winsock2.h>
@@ -7,188 +9,153 @@
 
 #include "commands.hpp"
 
+std::ostream& operator<<(std::ostream& stream, const Command& c) {
+    stream << c.m.body;
+    return stream;
+}
+
+Temperature::Temperature() {
+    m.body["command"] = "gc.read_temperature";
+    m.body["answer"] = json{};
+    m.body["arguments"] = json{};
+    auto buf = m.body.dump();
+    
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
+}
+
 unsigned Temperature::getAnswer() {
     return m.body["answer"]["temperature"];
 }
 
-
-Message CommandCreator::ping_pong() {
-    Message c;
-    c.body["command"] = "example.ping_pong";
-    c.body["answer"] = json{};
+WriteChipConfig::WriteChipConfig(uint96_t& cfg) {
+    m.body["command"] = "gc.write_chip_config";
+    m.body["answer"] = json{};
     json args;
-    args["ping"] = 0xdeadbeef;
-    c.body["arguments"] = args;
-    auto buf = c.body.dump();
+    args["chip_config"] = cfg.val();
+    m.body["arguments"] = args;
+    auto buf = m.body.dump();
     
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
 }
 
-Message CommandCreator::read_reg() {
-    Message c;
-    c.body["command"] = "gc.read_reg";
-    c.body["answer"] = json{};
+uint96_t WriteChipConfig::getAnswer() {
+    return m.body["answer"]["chip_config"];
+}
+
+
+WritePixelConfig::WritePixelConfig(uint17920_t& cfg) {
+    m.body["command"] = "gc.write_pixel_config";
+    m.body["answer"] = json{};
     json args;
-    args["reg"] = 0x1;
-    c.body["arguments"] = args;
-    auto buf = c.body.dump();
+    args["pixel_config"] = cfg.val();
+    m.body["arguments"] = args;
+    auto buf = m.body.dump();
+
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
+}
+
+uint17920_t WritePixelConfig::getAnswer() {
+     return m.body["answer"]["pixel_config"];
+}
+
+PixelPulseWrite::PixelPulseWrite(uint1120_t& cfg) {
+    m.body["command"] = "gc.pixel_pulse_write";
+    m.body["answer"] = json{};
+    json args;
+    args["pixel_pulse"] = cfg.val();
+    m.body["arguments"] = args;
+    auto buf = m.body.dump();
     
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
 }
 
-Message CommandCreator::write_reg() {
-	Message c; return c;
+uint1120_t PixelPulseWrite::getAnswer() {
+    return m.body["answer"]["pixel_pulse"];
 }
 
-Message CommandCreator::reset() {
-    Message c;
-    c.body["command"] = "gc.reset_gc_chip";
-    c.body["answer"] = json{};
+GCATReset::GCATReset() {
+    m.body["command"] = "gc.reset_gc_chip";
+    m.body["answer"] = json{};
     json args{};
-    c.body["arguments"] = args;
-    auto buf = c.body.dump();
+    m.body["arguments"] = args;
+    auto buf = m.body.dump();
     
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
 }
 
-Message CommandCreator::write_chip_config(std::array<unsigned, 3> chip_config) {
-    Message c;
-    c.body["command"] = "gc.write_chip_config";
-    c.body["answer"] = json{};
-    json args;
-    args["chip_config"] = chip_config;
-    c.body["arguments"] = args;
-    auto buf = c.body.dump();
+PulsesGenerate::PulsesGenerate() {
+    m.body["command"] = "gc.generate_pulses";
+    m.body["answer"] = json{};
+    m.body["arguments"] = json{};
+    auto buf = m.body.dump();
     
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
 }
 
-Message CommandCreator::write_pixel_config(std::array<unsigned int, 560> pixel_config) {
-    Message c;
-    c.body["command"] = "gc.write_pixel_config";
-    c.body["answer"] = json{};
-    json args;
-    args["pixel_config"] = pixel_config;
-    c.body["arguments"] = args;
-    auto buf = c.body.dump();
-
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
-}
-
-
-Message CommandCreator::pixel_pulse_write(std::array<unsigned, 35> pixel_pulse) {
-    Message c;
-    c.body["command"] = "gc.pixel_pulse_write";
-    c.body["answer"] = json{};
-    json args;
-    args["pixel_pulse"] = pixel_pulse;
-    c.body["arguments"] = args;
-    auto buf = c.body.dump();
-    
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
-}
-
-Temperature CommandCreator::read_temperature() {
-    Message c;
-    c.body["command"] = "gc.read_temperature";
-    c.body["answer"] = json{};
-    c.body["arguments"] = json{};
-    auto buf = c.body.dump();
-    
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-
-    return Temperature(c);
-}
-
-Message CommandCreator::generate_pulse() {
-    Message c;
-    c.body["command"] = "gc.generate_pulses";
-    c.body["answer"] = json{};
-    c.body["arguments"] = json{};
-    auto buf = c.body.dump();
-    
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
-}
-
-Message CommandCreator::reset_lna_hpf(unsigned wait_time_us) {
-        Message c;
-    c.body["command"] = "gc.reset_lna_hpf";
-    c.body["answer"] = json{};
+ResetLnaHpf::ResetLnaHpf(unsigned wait_time_us) {
+    m.body["command"] = "gc.reset_lna_hpf";
+    m.body["answer"] = json{};
     json args;
     args["wait_time_us"] = wait_time_us;
-    c.body["arguments"] = args;
-    auto buf = c.body.dump();
+    m.body["arguments"] = args;
+    auto buf = m.body.dump();
     
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
 }
 
-Message CommandCreator::lna_neuron_driving(unsigned wait_time_us) {
-        Message c;
-    c.body["command"] = "gc.lna_neuron_driving";
-    c.body["answer"] = json{};
+NeuronDrivingLna::NeuronDrivingLna(unsigned wait_time_us) {
+    m.body["command"] = "gc.lna_neuron_driving";
+    m.body["answer"] = json{};
     json args;
     args["wait_time_us"] = wait_time_us;
-    c.body["arguments"] = args;
-    auto buf = c.body.dump();
+    m.body["arguments"] = args;
+    auto buf = m.body.dump();
     
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
 }
 
-Message CommandCreator::lna_no_neuron_driving(unsigned wait_time_us) {
-    Message c;
-    c.body["command"] = "gc.lna_no_neuron_driving";
-    c.body["answer"] = json{};
+NoNeuronDrivingLna::NoNeuronDrivingLna(unsigned wait_time_us) {
+    m.body["command"] = "gc.lna_no_neuron_driving";
+    m.body["answer"] = json{};
     json args;
     args["wait_time_us"] = wait_time_us;
-    c.body["arguments"] = args;
-    auto buf = c.body.dump();
+    m.body["arguments"] = args;
+    auto buf = m.body.dump();
     
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
 }
 
-Message CommandCreator::get_pll_out_reset_status() {
-    Message c;
-    c.body["command"] = "gc.get_pll_out_reset_status";
-    c.body["answer"] = json{};
-    c.body["arguments"] = json{};
-    auto buf = c.body.dump();
+StatusPllOutReset::StatusPllOutReset() {
+    m.body["command"] = "gc.get_pll_out_reset_status";
+    m.body["answer"] = json{};
+    m.body["arguments"] = json{};
+    auto buf = m.body.dump();
     
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
 }
 
-Message CommandCreator::set_pll_bitstream_mode(unsigned mode) {
-    Message c;
-    c.body["command"] = "gc.set_pll_bitstream_mode";
-    c.body["answer"] = json{};
+unsigned StatusPllOutReset::getAnswer() {
+    return m.body["answer"]["status"];
+}
+
+ModePllBitstream::ModePllBitstream(unsigned mode) {
+    m.body["command"] = "gc.set_pll_bitstream_mode";
+    m.body["answer"] = json{};
     json args;
     args["mode"] = mode;
-    c.body["arguments"] = args;
-    auto buf = c.body.dump();
+    m.body["arguments"] = args;
+    auto buf = m.body.dump();
     
-    c.header.packtype = HEADER_PACKTYPE::COMMAND;
-    c.header.packetsize = htonl(buf.size());
-    return c;
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
 }

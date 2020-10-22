@@ -49,3 +49,13 @@ T send_command(T& c) {
 }
 
 template Temperature send_command<Temperature>(Temperature& c);
+template WriteChipConfig send_command<WriteChipConfig>(WriteChipConfig& c);
+template WritePixelConfig send_command<WritePixelConfig>(WritePixelConfig& c);
+template PixelPulseWrite send_command<PixelPulseWrite>(PixelPulseWrite& c);
+template PulsesGenerate send_command<PulsesGenerate>(PulsesGenerate& c);
+template GCATReset send_command<GCATReset>(GCATReset& c);
+template NeuronDrivingLna send_command<NeuronDrivingLna>(NeuronDrivingLna& c);
+template NoNeuronDrivingLna send_command<NoNeuronDrivingLna>(NoNeuronDrivingLna& c);
+template StatusPllOutReset send_command<StatusPllOutReset>(StatusPllOutReset& c);
+template ModePllBitstream send_command<ModePllBitstream>(ModePllBitstream& c);
+template ResetLnaHpf send_command<ResetLnaHpf>(ResetLnaHpf& c);

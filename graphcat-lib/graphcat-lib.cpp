@@ -6,26 +6,10 @@
 #include "commands.hpp"
 #include "sockets.hpp"
 
-int readReg() try {
-    CommandCreator c;
-    auto cmd = c.read_reg();
-    auto resp = send_command(cmd);
-    std::cout << resp.body << std::endl;
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
-}
-
-
 int GraphCATReset() try {
-    CommandCreator c;
-    auto cmd = c.reset();
+    GCATReset cmd;
     auto resp = send_command(cmd);
-    std::cout << resp.body << std::endl;
+    std::cout << resp << std::endl;
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -36,14 +20,12 @@ int GraphCATReset() try {
 }
 
 int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]) try {
-    CommandCreator c;
-    std::array<unsigned, 3> chip_config;
-    for(int i = 0; i < 3; i++) chip_config[i] = in[i];
-    auto cmd = c.write_chip_config(chip_config);
+    uint96_t chip_config = in;
+    WriteChipConfig cmd(chip_config);
     auto resp = send_command(cmd);
-    auto out_arr = resp.body["answer"]["chip_config"];
+    std::cout << resp << std::endl;
+    auto out_arr = resp.getAnswer();
     std::copy(out_arr.begin(), out_arr.end(), out);
-    std::cout << resp.body << std::endl;
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -54,14 +36,12 @@ int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]) try {
 }
 
 int PixelConfigRegisterWrite(const unsigned in[560], unsigned out[560]) try {
-    CommandCreator c;
-    std::array<unsigned, 560> pixel_config;
-    for(int i = 0; i < 560; i++) pixel_config[i] = in[i];
-    auto cmd = c.write_pixel_config(pixel_config);
+    uint17920_t pixel_config = in;
+    WritePixelConfig cmd(pixel_config);
     auto resp = send_command(cmd);
-    auto out_arr = resp.body["answer"]["pixel_config"];
+    std::cout << resp << std::endl;
+    auto out_arr = resp.getAnswer();
     std::copy(out_arr.begin(), out_arr.end(), out);
-    std::cout << resp.body << std::endl;
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -72,14 +52,12 @@ int PixelConfigRegisterWrite(const unsigned in[560], unsigned out[560]) try {
 }
 
 int PixelPulseRegisterWrite(const unsigned in[35], unsigned out[35]) try {
-    CommandCreator c;
-    std::array<unsigned, 35> pixel_pulse;
-    for(int i = 0; i < 35; i++) pixel_pulse[i] = in[i];
-    auto cmd = c.pixel_pulse_write(pixel_pulse);
+    uint1120_t pixel_pulse = in;
+    PixelPulseWrite cmd(pixel_pulse);
     auto resp = send_command(cmd);
-    auto out_arr = resp.body["answer"]["pixel_pulse"];
+    std::cout << resp << std::endl;
+    auto out_arr = resp.getAnswer();
     std::copy(out_arr.begin(), out_arr.end(), out);
-    std::cout << resp.body << std::endl;
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -91,10 +69,9 @@ int PixelPulseRegisterWrite(const unsigned in[35], unsigned out[35]) try {
 
 
 int GeneratePulses() try {
-    CommandCreator c;
-    auto cmd = c.generate_pulse();
+    PulsesGenerate cmd;
     auto resp = send_command(cmd);
-    std::cout << resp.body << std::endl;
+    std::cout << resp << std::endl;
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -107,11 +84,10 @@ int GeneratePulses() try {
 int ReadTemperature(unsigned* temp) try {
     if(!temp)
         return -1;
-    
-    CommandCreator c;
-    auto cmd = c.read_temperature();
+
+    Temperature cmd;
     auto resp = send_command(cmd);
-    std::cout << resp.m.body << std::endl;
+    std::cout << resp << std::endl;
     *temp = resp.getAnswer();
     return 0;
 } catch(std::exception& e) {
@@ -127,10 +103,9 @@ void initCommunication(const char* str, unsigned sync_port, unsigned async_port)
 }
 
 int LnaHpfReset(unsigned wait_time_us) try {
-    CommandCreator c;
-    auto cmd = c.reset_lna_hpf(wait_time_us);
+    ResetLnaHpf cmd(wait_time_us);
     auto resp = send_command(cmd);
-    std::cout << resp.body << std::endl;
+    std::cout << resp << std::endl;
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -141,10 +116,9 @@ int LnaHpfReset(unsigned wait_time_us) try {
 }
 
 int LnaNeuronDriving(unsigned wait_time_us) try {
-    CommandCreator c;
-    auto cmd = c.lna_neuron_driving(wait_time_us);
+    NeuronDrivingLna cmd(wait_time_us);
     auto resp = send_command(cmd);
-    std::cout << resp.body << std::endl;
+    std::cout << resp << std::endl;
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -155,10 +129,9 @@ int LnaNeuronDriving(unsigned wait_time_us) try {
 }
 
 int LnaNoNeuronDriving(unsigned wait_time_us) try {
-    CommandCreator c;
-    auto cmd = c.lna_no_neuron_driving(wait_time_us);
+    NoNeuronDrivingLna cmd(wait_time_us);
     auto resp = send_command(cmd);
-    std::cout << resp.body << std::endl;
+    std::cout << resp << std::endl;
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -172,11 +145,10 @@ int PllOutResetStatus(unsigned* status) try {
     if(!status)
         return -1;
     
-    CommandCreator c;
-    auto cmd = c.get_pll_out_reset_status();
+    StatusPllOutReset cmd;
     auto resp = send_command(cmd);
-    std::cout << resp.body << std::endl;
-    *status = resp.body["answer"]["status"];
+    std::cout << resp << std::endl;
+    *status = resp.getAnswer();
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -187,10 +159,9 @@ int PllOutResetStatus(unsigned* status) try {
 }
 
 int PllBitStreamGenerator(unsigned mode) try {
-    CommandCreator c;
-    auto cmd = c.set_pll_bitstream_mode(mode);
+    ModePllBitstream cmd(mode);
     auto resp = send_command(cmd);
-    std::cout << resp.body << std::endl;
+    std::cout << resp << std::endl;
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
@@ -198,14 +169,4 @@ int PllBitStreamGenerator(unsigned mode) try {
 } catch(...) {
     std::cout << "F" << std::endl;
     return -2;
-}
-
-
-
-int gc_ping_pong() {
-    CommandCreator c;
-    auto cmd = c.ping_pong();
-    auto resp = send_command(cmd);
-    std::cout << resp.body << std::endl;
-    return 0;
 }

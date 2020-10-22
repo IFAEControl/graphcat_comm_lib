@@ -9,6 +9,31 @@
 
 using json = nlohmann::json;
 
+template<std::size_t S>
+class LongInt {
+public:
+    LongInt(const unsigned* in) {
+        for(std::size_t i = 0; i < S; i++) a[i] = in[i];
+    }
+    
+    template<typename T>
+    LongInt(T& json) {
+        a = json;
+    }
+
+    auto val() { return a; } 
+
+    auto begin() { return a.begin(); }
+    auto end() { return a.end(); }
+
+    std::array<unsigned,S> a;
+};
+
+using uint96_t = LongInt<3>;
+using uint17920_t = LongInt<560>;
+using uint1120_t = LongInt<35>;
+
+
 struct Message {
     BaseHeaderType header{};
     json body{};
@@ -16,36 +41,68 @@ struct Message {
 
 class Command {
 public:
-    explicit Command(Message e) : m{e}{};
-
     Message m;
 
+    friend std::ostream& operator<< (std::ostream& stream, const Command& c);
 private:
 };
 
 class Temperature : public Command {
 public:
-    explicit Temperature(Message e) : Command{e}{};
-
+    Temperature();
     unsigned getAnswer();
 };
 
-class CommandCreator {
+class WriteChipConfig : public Command {
 public:
-    Message ping_pong();
-    Message reset();
-    Message write_chip_config(std::array<unsigned, 3> chip_config);
-    Message write_pixel_config(std::array<unsigned, 560> pixel_config);
-    Message pixel_pulse_write(std::array<unsigned, 35> pixel_pulse);
-    Message generate_pulse();
-    Temperature read_temperature();
-    Message read_reg();
-    Message write_reg();
-    Message reset_lna_hpf(unsigned wait_time_us);
-    Message lna_neuron_driving(unsigned wait_time_us);
-    Message lna_no_neuron_driving(unsigned wait_time_us);
-    Message get_pll_out_reset_status();
-    Message set_pll_bitstream_mode(unsigned mode);
-private:
+    WriteChipConfig(uint96_t& cfg);
+    uint96_t getAnswer();
+};
 
+class WritePixelConfig : public Command {
+public:
+    WritePixelConfig(uint17920_t& cfg);
+    uint17920_t getAnswer();
+};
+
+class PixelPulseWrite : public Command {
+public:
+    PixelPulseWrite(uint1120_t& cfg);
+    uint1120_t getAnswer();
+};
+
+class GCATReset : public Command {
+public:
+    GCATReset();
+};
+
+class PulsesGenerate : public Command {
+public:
+    PulsesGenerate();
+};
+
+class ResetLnaHpf : public Command {
+public:
+    ResetLnaHpf(unsigned wait_time_us);
+};
+
+class NeuronDrivingLna : public Command {
+public:
+    NeuronDrivingLna(unsigned wait_time_us);
+};
+
+class NoNeuronDrivingLna : public Command {
+public:
+    NoNeuronDrivingLna(unsigned wait_time_us);
+};
+
+class StatusPllOutReset : public Command {
+public:
+    StatusPllOutReset();
+    unsigned getAnswer();
+};
+
+class ModePllBitstream : public Command {
+public:
+    ModePllBitstream(unsigned mode);
 };
