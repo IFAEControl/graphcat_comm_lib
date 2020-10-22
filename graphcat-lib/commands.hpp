@@ -14,6 +14,22 @@ struct Message {
     json body{};
 };
 
+class Command {
+public:
+    explicit Command(Message e) : m{e}{};
+
+    Message m;
+
+private:
+};
+
+class Temperature : public Command {
+public:
+    explicit Temperature(Message e) : Command{e}{};
+
+    unsigned getAnswer();
+};
+
 class CommandCreator {
 public:
     Message ping_pong();
@@ -22,7 +38,7 @@ public:
     Message write_pixel_config(std::array<unsigned, 560> pixel_config);
     Message pixel_pulse_write(std::array<unsigned, 35> pixel_pulse);
     Message generate_pulse();
-    Message read_temperature();
+    Temperature read_temperature();
     Message read_reg();
     Message write_reg();
     Message reset_lna_hpf(unsigned wait_time_us);

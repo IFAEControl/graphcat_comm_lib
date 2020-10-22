@@ -7,6 +7,11 @@
 
 #include "commands.hpp"
 
+unsigned Temperature::getAnswer() {
+    return m.body["answer"]["temperature"];
+}
+
+
 Message CommandCreator::ping_pong() {
     Message c;
     c.body["command"] = "example.ping_pong";
@@ -95,7 +100,7 @@ Message CommandCreator::pixel_pulse_write(std::array<unsigned, 35> pixel_pulse) 
     return c;
 }
 
-Message CommandCreator::read_temperature() {
+Temperature CommandCreator::read_temperature() {
     Message c;
     c.body["command"] = "gc.read_temperature";
     c.body["answer"] = json{};
@@ -104,7 +109,8 @@ Message CommandCreator::read_temperature() {
     
     c.header.packtype = HEADER_PACKTYPE::COMMAND;
     c.header.packetsize = htonl(buf.size());
-    return c;
+
+    return Temperature(c);
 }
 
 Message CommandCreator::generate_pulse() {

@@ -111,8 +111,8 @@ int ReadTemperature(unsigned* temp) try {
     CommandCreator c;
     auto cmd = c.read_temperature();
     auto resp = send_command(cmd);
-    std::cout << resp.body << std::endl;
-    *temp = resp.body["answer"]["temperature"];
+    std::cout << resp.m.body << std::endl;
+    *temp = resp.getAnswer();
     return 0;
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;

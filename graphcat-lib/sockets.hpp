@@ -5,5 +5,9 @@
 #include "commands.hpp"
 #include "header.hpp"
 
-Message send_command(const Message& c);
+Message send_command(Message& c);
+
+template<typename T>
+T send_command(T& c);
+
 void set_dest_ip(const std::string& ip) noexcept;
