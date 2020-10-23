@@ -41,10 +41,14 @@ struct Message {
 
 class Command {
 public:
-    Message m;
+    Command(const std::string& name);
+
+    Message getMessage();
 
     friend std::ostream& operator<< (std::ostream& stream, const Command& c);
-private:
+
+protected:
+    Message m;
 };
 
 class Temperature : public Command {

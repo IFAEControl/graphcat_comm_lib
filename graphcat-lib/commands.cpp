@@ -9,35 +9,38 @@
 
 #include "commands.hpp"
 
+Command::Command(const std::string& name) {
+    m.body["command"] = "gc." + name;
+
+    // Defaults
+    m.body["answer"] = json{};
+    m.body["arguments"] = json{};
+}
+
+Message Command::getMessage() {
+    auto buf = m.body.dump();
+    
+    m.header.packtype = HEADER_PACKTYPE::COMMAND;
+    m.header.packetsize = htonl(buf.size());
+    return m;
+}
+
 std::ostream& operator<<(std::ostream& stream, const Command& c) {
     stream << c.m.body;
     return stream;
 }
 
-Temperature::Temperature() {
-    m.body["command"] = "gc.read_temperature";
-    m.body["answer"] = json{};
-    m.body["arguments"] = json{};
-    auto buf = m.body.dump();
-    
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
+Temperature::Temperature() : Command("read_temperature") {
 }
 
 unsigned Temperature::getAnswer() {
     return m.body["answer"]["temperature"];
 }
 
-WriteChipConfig::WriteChipConfig(uint96_t& cfg) {
-    m.body["command"] = "gc.write_chip_config";
-    m.body["answer"] = json{};
+WriteChipConfig::WriteChipConfig(uint96_t& cfg) : Command("write_chip_config") {
     json args;
     args["chip_config"] = cfg.val();
     m.body["arguments"] = args;
-    auto buf = m.body.dump();
-    
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
 }
 
 uint96_t WriteChipConfig::getAnswer() {
@@ -45,117 +48,59 @@ uint96_t WriteChipConfig::getAnswer() {
 }
 
 
-WritePixelConfig::WritePixelConfig(uint17920_t& cfg) {
-    m.body["command"] = "gc.write_pixel_config";
-    m.body["answer"] = json{};
+WritePixelConfig::WritePixelConfig(uint17920_t& cfg) : Command("write_pixel_config") {
     json args;
     args["pixel_config"] = cfg.val();
     m.body["arguments"] = args;
-    auto buf = m.body.dump();
-
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
 }
 
 uint17920_t WritePixelConfig::getAnswer() {
      return m.body["answer"]["pixel_config"];
 }
 
-PixelPulseWrite::PixelPulseWrite(uint1120_t& cfg) {
-    m.body["command"] = "gc.pixel_pulse_write";
-    m.body["answer"] = json{};
+PixelPulseWrite::PixelPulseWrite(uint1120_t& cfg) : Command("pixel_pulse_write") {
     json args;
     args["pixel_pulse"] = cfg.val();
     m.body["arguments"] = args;
-    auto buf = m.body.dump();
-    
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
 }
 
 uint1120_t PixelPulseWrite::getAnswer() {
     return m.body["answer"]["pixel_pulse"];
 }
 
-GCATReset::GCATReset() {
-    m.body["command"] = "gc.reset_gc_chip";
-    m.body["answer"] = json{};
-    json args{};
-    m.body["arguments"] = args;
-    auto buf = m.body.dump();
-    
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
+GCATReset::GCATReset() : Command("reset_gc_chip") {
 }
 
-PulsesGenerate::PulsesGenerate() {
-    m.body["command"] = "gc.generate_pulses";
-    m.body["answer"] = json{};
-    m.body["arguments"] = json{};
-    auto buf = m.body.dump();
-    
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
+PulsesGenerate::PulsesGenerate() : Command("generate_pulses") {
 }
 
-ResetLnaHpf::ResetLnaHpf(unsigned wait_time_us) {
-    m.body["command"] = "gc.reset_lna_hpf";
-    m.body["answer"] = json{};
+ResetLnaHpf::ResetLnaHpf(unsigned wait_time_us) : Command("reset_lna_hpf") {
     json args;
     args["wait_time_us"] = wait_time_us;
     m.body["arguments"] = args;
-    auto buf = m.body.dump();
-    
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
 }
 
-NeuronDrivingLna::NeuronDrivingLna(unsigned wait_time_us) {
-    m.body["command"] = "gc.lna_neuron_driving";
-    m.body["answer"] = json{};
+NeuronDrivingLna::NeuronDrivingLna(unsigned wait_time_us) : Command("lna_neuron_driving") {
     json args;
     args["wait_time_us"] = wait_time_us;
     m.body["arguments"] = args;
-    auto buf = m.body.dump();
-    
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
 }
 
-NoNeuronDrivingLna::NoNeuronDrivingLna(unsigned wait_time_us) {
-    m.body["command"] = "gc.lna_no_neuron_driving";
-    m.body["answer"] = json{};
+NoNeuronDrivingLna::NoNeuronDrivingLna(unsigned wait_time_us) : Command("lna_no_neuron_driving") {
     json args;
     args["wait_time_us"] = wait_time_us;
     m.body["arguments"] = args;
-    auto buf = m.body.dump();
-    
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
 }
 
-StatusPllOutReset::StatusPllOutReset() {
-    m.body["command"] = "gc.get_pll_out_reset_status";
-    m.body["answer"] = json{};
-    m.body["arguments"] = json{};
-    auto buf = m.body.dump();
-    
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
+StatusPllOutReset::StatusPllOutReset() : Command("get_pll_out_reset_status") {
 }
 
 unsigned StatusPllOutReset::getAnswer() {
     return m.body["answer"]["status"];
 }
 
-ModePllBitstream::ModePllBitstream(unsigned mode) {
-    m.body["command"] = "gc.set_pll_bitstream_mode";
-    m.body["answer"] = json{};
+ModePllBitstream::ModePllBitstream(unsigned mode) : Command("set_pll_bitstream_mode") {
     json args;
     args["mode"] = mode;
     m.body["arguments"] = args;
-    auto buf = m.body.dump();
-    
-    m.header.packtype = HEADER_PACKTYPE::COMMAND;
-    m.header.packetsize = htonl(buf.size());
 }

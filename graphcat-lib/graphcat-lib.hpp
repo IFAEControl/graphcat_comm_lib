@@ -6,8 +6,6 @@
 #define DllExport   /* Why windows is so weird and unpredictable */
 #endif
 
-extern "C" DllExport int gc_ping_pong();
-
 extern "C" DllExport int readReg();
 extern "C" DllExport int GraphCATReset();
 extern "C" DllExport int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]);

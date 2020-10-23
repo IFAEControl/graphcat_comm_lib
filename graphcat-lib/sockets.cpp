@@ -35,16 +35,18 @@ Message send_command(Message& c) {
 
 template<typename T>
 T send_command(T& c) {
+    auto m = c.getMessage();
+
     Poco::Net::SocketAddress sa(ip, port);
     Poco::Net::StreamSocket socket(sa);
-    socket.sendBytes(&c.m.header, HEADER_BYTE_SIZE);
+    socket.sendBytes(&m.header, HEADER_BYTE_SIZE);
     Poco::Net::SocketStream str(socket);
-    str << c.m.body;
+    str << m.body;
     str.flush();
     std::stringstream ss;
     Poco::StreamCopier::copyStream(str, ss);
-    std::memcpy(&c.m.header, ss.str().c_str(), HEADER_BYTE_SIZE);
-    c.m.body = json::parse(ss.seekg(HEADER_BYTE_SIZE));
+    std::memcpy(&m.header, ss.str().c_str(), HEADER_BYTE_SIZE);
+    m.body = json::parse(ss.seekg(HEADER_BYTE_SIZE));
     return c;
 }
 
