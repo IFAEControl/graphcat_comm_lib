@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <utility>
 
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
+
 #include "graphcat-lib.hpp"
 #include "commands.hpp"
 #include "sockets.hpp"
@@ -10,13 +13,13 @@
 template <typename T>
 std::pair<int, T> sendCmd(T& cmd) try {
     auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
+    spdlog::debug(resp);
     return {0, resp};
 } catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
+    spdlog::critical(e.what());
     return {-1, cmd};
 } catch(...) {
-    std::cout << "F" << std::endl;
+    spdlog::critical("Unknown error");
     return {-2, cmd};
 }
 
