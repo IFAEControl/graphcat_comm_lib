@@ -1,172 +1,119 @@
 #include <iostream>
 #include <array>
 #include <algorithm>
+#include <utility>
 
 #include "graphcat-lib.hpp"
 #include "commands.hpp"
 #include "sockets.hpp"
 
-int GraphCATReset() try {
-    GCATReset cmd;
+template <typename T>
+std::pair<int, T> sendCmd(T& cmd) try {
     auto resp = send_command(cmd);
     std::cout << resp << std::endl;
-    return 0;
+    return {0, resp};
 } catch(std::exception& e) {
     std::cout << e.what() << std::endl;
-    return -1;
+    return {-1, cmd};
 } catch(...) {
     std::cout << "F" << std::endl;
-    return -2;
+    return {-2, cmd};
 }
 
-int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]) try {
+int GraphCATReset() {
+    GCATReset cmd;
+    auto resp = sendCmd(cmd);
+    return resp.first;
+}
+
+int ChipConfigRegisterWrite(const unsigned in[3], unsigned out[3]) {
     uint96_t chip_config = in;
     WriteChipConfig cmd(chip_config);
-    auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
-    auto out_arr = resp.getAnswer();
+    auto resp = sendCmd(cmd);
+    if(resp.first < 0) return resp.first;
+
+    auto out_arr = resp.second.getAnswer();
     std::copy(out_arr.begin(), out_arr.end(), out);
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
+    return resp.first;
 }
 
-int PixelConfigRegisterWrite(const unsigned in[560], unsigned out[560]) try {
+int PixelConfigRegisterWrite(const unsigned in[560], unsigned out[560]) {
     uint17920_t pixel_config = in;
     WritePixelConfig cmd(pixel_config);
-    auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
-    auto out_arr = resp.getAnswer();
+    auto resp = sendCmd(cmd);
+    if(resp.first < 0) return resp.first;
+
+    auto out_arr = resp.second.getAnswer();
     std::copy(out_arr.begin(), out_arr.end(), out);
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
+    return resp.first;
 }
 
-int PixelPulseRegisterWrite(const unsigned in[35], unsigned out[35]) try {
+int PixelPulseRegisterWrite(const unsigned in[35], unsigned out[35]) {
     uint1120_t pixel_pulse = in;
     PixelPulseWrite cmd(pixel_pulse);
-    auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
-    auto out_arr = resp.getAnswer();
+    auto resp = sendCmd(cmd);
+    if(resp.first < 0) return resp.first;
+
+    auto out_arr = resp.second.getAnswer();
     std::copy(out_arr.begin(), out_arr.end(), out);
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
+    return resp.first;
 }
 
 
-int GeneratePulses() try {
+int GeneratePulses() {
     PulsesGenerate cmd;
-    auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
+    auto resp = sendCmd(cmd);
+    return resp.first;
 }
 
-int ReadTemperature(unsigned* temp) try {
+int ReadTemperature(unsigned* temp) {
     if(!temp)
         return -1;
 
     Temperature cmd;
-    auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
-    *temp = resp.getAnswer();
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
+    auto resp = sendCmd(cmd);
+    if(resp.first < 0) return resp.first;
+
+    *temp = resp.second.getAnswer();
+    return resp.first;
 }
 
 void initCommunication(const char* str, unsigned sync_port, unsigned async_port) {
     set_dest_ip(str);
 }
 
-int LnaHpfReset(unsigned wait_time_us) try {
+int LnaHpfReset(unsigned wait_time_us) {
     ResetLnaHpf cmd(wait_time_us);
-    auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
+    auto resp = sendCmd(cmd);
+    return resp.first;
 }
 
-int LnaNeuronDriving(unsigned wait_time_us) try {
+int LnaNeuronDriving(unsigned wait_time_us) {
     NeuronDrivingLna cmd(wait_time_us);
-    auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
+    auto resp = sendCmd(cmd);
+    return resp.first;
 }
 
-int LnaNoNeuronDriving(unsigned wait_time_us) try {
+int LnaNoNeuronDriving(unsigned wait_time_us) {
     NoNeuronDrivingLna cmd(wait_time_us);
-    auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
+    auto resp = sendCmd(cmd);
+    return resp.first;
 }
 
-int PllOutResetStatus(unsigned* status) try {
+int PllOutResetStatus(unsigned* status) {
     if(!status)
         return -1;
     
     StatusPllOutReset cmd;
-    auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
-    *status = resp.getAnswer();
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
+    auto resp = sendCmd(cmd);
+    if(resp.first < 0) return resp.first;
+
+    *status = resp.second.getAnswer();
+    return resp.first;
 }
 
-int PllBitStreamGenerator(unsigned mode) try {
+int PllBitStreamGenerator(unsigned mode) {
     ModePllBitstream cmd(mode);
-    auto resp = send_command(cmd);
-    std::cout << resp << std::endl;
-    return 0;
-} catch(std::exception& e) {
-    std::cout << e.what() << std::endl;
-    return -1;
-} catch(...) {
-    std::cout << "F" << std::endl;
-    return -2;
+    auto resp = sendCmd(cmd);
+    return resp.first;
 }
