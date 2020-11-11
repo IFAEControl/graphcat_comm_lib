@@ -35,7 +35,7 @@ Message send_command(Message& c) {
 
 template<typename T>
 T send_command(T& c) {
-    auto m = c.getMessage();
+    auto& m = c.getMessage();
 
     Poco::Net::SocketAddress sa(ip, port);
     Poco::Net::StreamSocket socket(sa);

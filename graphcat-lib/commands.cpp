@@ -13,11 +13,11 @@ Command::Command(const std::string& name) {
     m.body["command"] = "gc." + name;
 
     // Defaults
-    m.body["answer"] = json{};
-    m.body["arguments"] = json{};
+    m.body["answer"] = json({});
+    m.body["arguments"] = json({});
 }
 
-Message Command::getMessage() {
+Message& Command::getMessage() {
     auto buf = m.body.dump();
     
     m.header.packtype = HEADER_PACKTYPE::COMMAND;

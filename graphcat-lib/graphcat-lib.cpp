@@ -12,6 +12,8 @@
 
 template <typename T>
 std::pair<int, T> sendCmd(T& cmd) try {
+    spdlog::set_level(spdlog::level::debug);
+    
     auto resp = send_command(cmd);
     spdlog::debug(resp);
     return {0, resp};

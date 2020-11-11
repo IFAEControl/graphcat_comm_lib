@@ -43,7 +43,7 @@ class Command {
 public:
     Command(const std::string& name);
 
-    Message getMessage();
+    Message& getMessage();
 
     friend std::ostream& operator<< (std::ostream& stream, const Command& c);
 
