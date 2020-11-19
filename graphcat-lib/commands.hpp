@@ -110,3 +110,14 @@ class ModePllBitstream : public Command {
 public:
     ModePllBitstream(unsigned mode);
 };
+
+class StartLna : public Command {
+ public:
+    StartLna(bool neuron_driving, unsigned period_ms, unsigned wait_time_us, unsigned reset_time_us);
+};
+
+class StopLna : public Command {
+ public:
+    StopLna();
+};
+

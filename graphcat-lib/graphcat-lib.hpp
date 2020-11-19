@@ -19,4 +19,7 @@ extern "C" DllExport int LnaNoNeuronDriving(unsigned wait_time_us, unsigned rese
 extern "C" DllExport int PllOutResetStatus(unsigned* status);
 extern "C" DllExport int PllBitStreamGenerator(unsigned mode);
 
-
+// neuron_driving == true -> LnaNeuronDriving is executed
+// neuron_driving == false -> LnaNoNeuronDriving is executed
+extern "C" DllExport int StartLnaThread(bool neuron_driving, unsigned period_ms, unsigned wait_time_us, unsigned reset_time_us);
+extern "C" DllExport int StopThread();

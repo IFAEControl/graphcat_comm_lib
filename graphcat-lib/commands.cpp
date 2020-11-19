@@ -106,3 +106,16 @@ ModePllBitstream::ModePllBitstream(unsigned mode) : Command("set_pll_bitstream_m
     args["mode"] = mode;
     m.body["arguments"] = args;
 }
+
+StartLna::StartLna(bool neuron_driving, unsigned period_ms, unsigned wait_time_us,
+                        unsigned reset_time_us) : Command("start_lna_thread") {
+    json args;
+    args["neuron_driving"] = neuron_driving;
+    args["period_ms"] = period_ms;
+    args["wait_time_us"] = wait_time_us;
+    args["reset_time_us"] = reset_time_us;
+    m.body["arguments"] = args;
+}
+
+StopLna::StopLna() : Command("stop_lna_thread") {
+}

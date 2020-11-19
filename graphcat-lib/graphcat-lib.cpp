@@ -122,3 +122,16 @@ int PllBitStreamGenerator(unsigned mode) {
     auto resp = sendCmd(cmd);
     return resp.first;
 }
+
+int StartLnaThread(bool neuron_driving, unsigned period_ms, unsigned wait_time_us, unsigned reset_time_us) {
+    StartLna cmd(neuron_driving, period_ms, wait_time_us, reset_time_us);
+    auto resp = sendCmd(cmd);
+    return resp.first;
+}
+
+int StopThread() {
+    StopLna cmd;
+    auto resp = sendCmd(cmd);
+    return resp.first;
+}
+
