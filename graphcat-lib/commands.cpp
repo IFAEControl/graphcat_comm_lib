@@ -80,15 +80,17 @@ ResetLnaHpf::ResetLnaHpf(unsigned wait_time_us) : Command("reset_lna_hpf") {
     m.body["arguments"] = args;
 }
 
-NeuronDrivingLna::NeuronDrivingLna(unsigned wait_time_us) : Command("lna_neuron_driving") {
+NeuronDrivingLna::NeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us) : Command("lna_neuron_driving") {
     json args;
     args["wait_time_us"] = wait_time_us;
+    args["reset_time_us"] = reset_time_us;
     m.body["arguments"] = args;
 }
 
-NoNeuronDrivingLna::NoNeuronDrivingLna(unsigned wait_time_us) : Command("lna_no_neuron_driving") {
+NoNeuronDrivingLna::NoNeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us) : Command("lna_no_neuron_driving") {
     json args;
     args["wait_time_us"] = wait_time_us;
+    args["reset_time_us"] = reset_time_us;
     m.body["arguments"] = args;
 }
 

@@ -92,12 +92,12 @@ public:
 
 class NeuronDrivingLna : public Command {
 public:
-    NeuronDrivingLna(unsigned wait_time_us);
+    NeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us);
 };
 
 class NoNeuronDrivingLna : public Command {
 public:
-    NoNeuronDrivingLna(unsigned wait_time_us);
+    NoNeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us);
 };
 
 class StatusPllOutReset : public Command {

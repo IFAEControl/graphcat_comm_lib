@@ -93,14 +93,14 @@ int LnaHpfReset(unsigned wait_time_us) {
     return resp.first;
 }
 
-int LnaNeuronDriving(unsigned wait_time_us) {
-    NeuronDrivingLna cmd(wait_time_us);
+int LnaNeuronDriving(unsigned wait_time_us, unsigned reset_time_us) {
+    NeuronDrivingLna cmd(wait_time_us, reset_time_us);
     auto resp = sendCmd(cmd);
     return resp.first;
 }
 
-int LnaNoNeuronDriving(unsigned wait_time_us) {
-    NoNeuronDrivingLna cmd(wait_time_us);
+int LnaNoNeuronDriving(unsigned wait_time_us, unsigned reset_time_us) {
+    NoNeuronDrivingLna cmd(wait_time_us, reset_time_us);
     auto resp = sendCmd(cmd);
     return resp.first;
 }
