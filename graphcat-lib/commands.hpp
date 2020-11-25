@@ -92,12 +92,12 @@ public:
 
 class NeuronDrivingLna : public Command {
 public:
-    NeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us);
+    NeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us, bool hold_reset);
 };
 
 class NoNeuronDrivingLna : public Command {
 public:
-    NoNeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us);
+    NoNeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us, bool hold_reset);
 };
 
 class StatusPllOutReset : public Command {
@@ -113,7 +113,8 @@ public:
 
 class StartLna : public Command {
  public:
-    StartLna(bool neuron_driving, unsigned period_ms, unsigned wait_time_us, unsigned reset_time_us);
+    StartLna(bool neuron_driving, unsigned period_ms, unsigned wait_time_us,
+            unsigned reset_time_us, bool hold_reset);
 };
 
 class StopLna : public Command {

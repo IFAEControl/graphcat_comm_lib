@@ -80,17 +80,21 @@ ResetLnaHpf::ResetLnaHpf(unsigned wait_time_us) : Command("reset_lna_hpf") {
     m.body["arguments"] = args;
 }
 
-NeuronDrivingLna::NeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us) : Command("lna_neuron_driving") {
+NeuronDrivingLna::NeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us,
+                                    bool hold_reset) : Command("lna_neuron_driving") {
     json args;
     args["wait_time_us"] = wait_time_us;
     args["reset_time_us"] = reset_time_us;
+    args["hold_reset"] = hold_reset;
     m.body["arguments"] = args;
 }
 
-NoNeuronDrivingLna::NoNeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us) : Command("lna_no_neuron_driving") {
+NoNeuronDrivingLna::NoNeuronDrivingLna(unsigned wait_time_us, unsigned reset_time_us,
+                                        bool hold_reset) : Command("lna_no_neuron_driving") {
     json args;
     args["wait_time_us"] = wait_time_us;
     args["reset_time_us"] = reset_time_us;
+    args["hold_reset"] = hold_reset;
     m.body["arguments"] = args;
 }
 
@@ -108,12 +112,13 @@ ModePllBitstream::ModePllBitstream(unsigned mode) : Command("set_pll_bitstream_m
 }
 
 StartLna::StartLna(bool neuron_driving, unsigned period_ms, unsigned wait_time_us,
-                        unsigned reset_time_us) : Command("start_lna_thread") {
+                        unsigned reset_time_us, bool hold_reset) : Command("start_lna_thread") {
     json args;
     args["neuron_driving"] = neuron_driving;
     args["period_ms"] = period_ms;
     args["wait_time_us"] = wait_time_us;
     args["reset_time_us"] = reset_time_us;
+    args["hold_reset"] = hold_reset;
     m.body["arguments"] = args;
 }
 

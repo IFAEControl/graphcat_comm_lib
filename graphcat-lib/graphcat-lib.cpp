@@ -93,14 +93,14 @@ int LnaHpfReset(unsigned wait_time_us) {
     return resp.first;
 }
 
-int LnaNeuronDriving(unsigned wait_time_us, unsigned reset_time_us) {
-    NeuronDrivingLna cmd(wait_time_us, reset_time_us);
+int LnaNeuronDriving(unsigned wait_time_us, unsigned reset_time_us, bool hold_reset) {
+    NeuronDrivingLna cmd(wait_time_us, reset_time_us, hold_reset);
     auto resp = sendCmd(cmd);
     return resp.first;
 }
 
-int LnaNoNeuronDriving(unsigned wait_time_us, unsigned reset_time_us) {
-    NoNeuronDrivingLna cmd(wait_time_us, reset_time_us);
+int LnaNoNeuronDriving(unsigned wait_time_us, unsigned reset_time_us, bool hold_reset) {
+    NoNeuronDrivingLna cmd(wait_time_us, reset_time_us, hold_reset);
     auto resp = sendCmd(cmd);
     return resp.first;
 }
@@ -123,8 +123,9 @@ int PllBitStreamGenerator(unsigned mode) {
     return resp.first;
 }
 
-int StartLnaThread(bool neuron_driving, unsigned period_ms, unsigned wait_time_us, unsigned reset_time_us) {
-    StartLna cmd(neuron_driving, period_ms, wait_time_us, reset_time_us);
+int StartLnaThread(bool neuron_driving, unsigned period_ms, unsigned wait_time_us, unsigned reset_time_us,
+                    bool hold_reset) {
+    StartLna cmd(neuron_driving, period_ms, wait_time_us, reset_time_us, hold_reset);
     auto resp = sendCmd(cmd);
     return resp.first;
 }
