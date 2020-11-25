@@ -14,13 +14,13 @@ extern "C" DllExport int GeneratePulses();
 extern "C" DllExport int ReadTemperature(unsigned* temp);
 extern "C" DllExport void initCommunication(const char* str, unsigned sync_port, unsigned async_port);
 extern "C" DllExport int LnaHpfReset(unsigned wait_time_us);
-extern "C" DllExport int LnaNeuronDriving(unsigned wait_time_us, unsigned reset_time_us, bool hold_reset = false);
-extern "C" DllExport int LnaNoNeuronDriving(unsigned wait_time_us, unsigned reset_time_us, bool hold_reset = false);
+extern "C" DllExport int LnaNeuronDriving(unsigned wait_time_us, unsigned reset_time_us, bool disable_reset = false);
+extern "C" DllExport int LnaNoNeuronDriving(unsigned wait_time_us, unsigned reset_time_us, bool disable_reset = false);
 extern "C" DllExport int PllOutResetStatus(unsigned* status);
 extern "C" DllExport int PllBitStreamGenerator(unsigned mode);
 
 // neuron_driving == true -> LnaNeuronDriving is executed
 // neuron_driving == false -> LnaNoNeuronDriving is executed
 extern "C" DllExport int StartLnaThread(bool neuron_driving, unsigned period_ms, unsigned wait_time_us, unsigned reset_time_us,
-										bool hold_reset = false);
+										bool disable_reset = false);
 extern "C" DllExport int StopThread();
