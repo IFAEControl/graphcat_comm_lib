@@ -111,6 +111,14 @@ ModePllBitstream::ModePllBitstream(unsigned mode) : Command("set_pll_bitstream_m
     m.body["arguments"] = args;
 }
 
+EnableCBLna::EnableCBLna(bool hpf_reset, bool lna_in_short, bool lna_in_en) : Command("lna_enable_cb") {
+    json args;
+    args["hpf_reset_en"] = hpf_reset;
+    args["lna_in_short_en"] = lna_in_short;
+    args["lna_in_en"] = lna_in_en;
+    m.body["arguments"] = args;
+}
+
 StartLna::StartLna(bool neuron_driving, unsigned period_ms, unsigned wait_time_us,
                         unsigned reset_time_us, bool disable_reset) : Command("start_lna_thread") {
     json args;

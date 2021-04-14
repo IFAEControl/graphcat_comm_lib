@@ -123,6 +123,12 @@ int PllBitStreamGenerator(unsigned mode) {
     return resp.first;
 }
 
+int LnaEnableCB(bool hpf_reset, bool lna_in_short, bool lna_in_en) {
+    EnableCBLna cmd(hpf_reset, lna_in_short, lna_in_en);
+    auto resp = sendCmd(cmd);
+    return resp.first;
+}
+
 int StartLnaThread(bool neuron_driving, unsigned period_ms, unsigned wait_time_us, unsigned reset_time_us,
                     bool disable_reset) {
     StartLna cmd(neuron_driving, period_ms, wait_time_us, reset_time_us, disable_reset);

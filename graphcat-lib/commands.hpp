@@ -111,6 +111,11 @@ public:
     ModePllBitstream(unsigned mode);
 };
 
+class EnableCBLna : public Command {
+public:
+    EnableCBLna(bool hpf_reset, bool lna_in_short, bool lna_in_en);
+};
+
 class StartLna : public Command {
  public:
     StartLna(bool neuron_driving, unsigned period_ms, unsigned wait_time_us,
