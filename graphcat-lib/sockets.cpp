@@ -64,3 +64,4 @@ template ResetLnaHpf send_command<ResetLnaHpf>(ResetLnaHpf& c);
 template StartLna send_command<StartLna>(StartLna& c);
 template StopLna send_command<StopLna>(StopLna& c);
 template EnableCBLna send_command<EnableCBLna>(EnableCBLna& c);
+template SetElectrodeRedaout send_command<SetElectrodeRedaout>(SetElectrodeRedaout& c);

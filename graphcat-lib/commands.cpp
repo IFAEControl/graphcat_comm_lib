@@ -119,6 +119,12 @@ EnableCBLna::EnableCBLna(bool hpf_reset, bool lna_in_short, bool lna_in_en) : Co
     m.body["arguments"] = args;
 }
 
+SetElectrodeRedaout::SetElectrodeRedaout(unsigned n) : Command("set_readout_electrode") {
+    json args;
+    args["number"] = n;
+    m.body["arguments"] = args;
+}
+
 StartLna::StartLna(bool neuron_driving, unsigned period_ms, unsigned wait_time_us,
                         unsigned reset_time_us, bool disable_reset) : Command("start_lna_thread") {
     json args;
