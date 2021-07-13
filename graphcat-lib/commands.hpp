@@ -15,13 +15,13 @@ public:
     LongInt(const unsigned* in) {
         for(std::size_t i = 0; i < S; i++) a[i] = in[i];
     }
-    
+
     template<typename T>
     LongInt(T& json) {
         a = json;
     }
 
-    auto val() { return a; } 
+    auto val() { return a; }
 
     auto begin() { return a.begin(); }
     auto end() { return a.end(); }
@@ -130,5 +130,16 @@ class StartLna : public Command {
 class StopLna : public Command {
  public:
     StopLna();
+};
+
+class RegRead : public Command {
+public:
+	RegRead(unsigned reg);
+	unsigned getAnswer();
+};
+
+class RegWrite : public Command {
+public:
+	RegWrite(unsigned reg, const unsigned val);
 };
 

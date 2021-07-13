@@ -19,7 +19,7 @@ Command::Command(const std::string& name) {
 
 Message& Command::getMessage() {
     auto buf = m.body.dump();
-    
+
     m.header.packtype = HEADER_PACKTYPE::COMMAND;
     m.header.packetsize = htonl(buf.size());
     return m;
@@ -137,4 +137,21 @@ StartLna::StartLna(bool neuron_driving, unsigned period_ms, unsigned wait_time_u
 }
 
 StopLna::StopLna() : Command("stop_lna_thread") {
+}
+
+RegRead::RegRead(unsigned int reg) : Command("read_reg") {
+	json args;
+	args["reg"] = reg;
+	m.body["arguments"] = args;
+}
+
+unsigned RegRead::getAnswer() {
+	return m.body["answer"]["value"];
+}
+
+RegWrite::RegWrite(unsigned reg, const unsigned val) : Command("write_reg") {
+	json args;
+	args["reg"] = reg;
+	args["value"] = val;
+	m.body["arguments"] = args;
 }

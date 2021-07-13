@@ -25,3 +25,6 @@ extern "C" DllExport int SetReadoutElectrode(unsigned n);
 extern "C" DllExport int StartLnaThread(bool neuron_driving, unsigned period_ms, unsigned wait_time_us, unsigned reset_time_us,
 										bool disable_reset = false);
 extern "C" DllExport int StopThread();
+
+extern "C" DllExport int ReadReg(unsigned reg, unsigned* val);
+extern "C" DllExport int WriteReg(unsigned reg, const unsigned val);

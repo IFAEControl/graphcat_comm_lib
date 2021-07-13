@@ -13,7 +13,7 @@
 template <typename T>
 std::pair<int, T> sendCmd(T& cmd) try {
     spdlog::set_level(spdlog::level::debug);
-    
+
     auto resp = send_command(cmd);
     spdlog::debug(resp);
     return {0, resp};
@@ -108,7 +108,7 @@ int LnaNoNeuronDriving(unsigned wait_time_us, unsigned reset_time_us, bool disab
 int PllOutResetStatus(unsigned* status) {
     if(!status)
         return -1;
-    
+
     StatusPllOutReset cmd;
     auto resp = sendCmd(cmd);
     if(resp.first < 0) return resp.first;
@@ -148,3 +148,17 @@ int StopThread() {
     return resp.first;
 }
 
+int ReadReg(unsigned reg, unsigned* val) {
+	RegRead cmd(reg);
+	auto resp = sendCmd(cmd);
+	if(resp.first < 0) return resp.first;
+
+	*val = resp.second.getAnswer();
+	return resp.first;
+}
+
+int WriteReg(unsigned reg, const unsigned val) {
+	RegWrite cmd(reg, val);
+	auto resp = sendCmd(cmd);
+	return resp.first;
+}

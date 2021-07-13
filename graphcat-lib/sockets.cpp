@@ -65,3 +65,5 @@ template StartLna send_command<StartLna>(StartLna& c);
 template StopLna send_command<StopLna>(StopLna& c);
 template EnableCBLna send_command<EnableCBLna>(EnableCBLna& c);
 template SetElectrodeRedaout send_command<SetElectrodeRedaout>(SetElectrodeRedaout& c);
+template RegRead send_command<RegRead>(RegRead& c);
+template RegWrite send_command<RegWrite>(RegWrite& c);
